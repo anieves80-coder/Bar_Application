@@ -26,7 +26,7 @@ const Header = (props) => {
                                 size="sm"
                             >
                                 <Dropdown.Item as="button"><Link to="/"><i className="fas fa-search mr-1"></i>Search</Link></Dropdown.Item>
-                                <Dropdown.Item as="button"><Link to="/saved"><i className="fas fa-book-open mr-1"></i>Saved</Link></Dropdown.Item>
+                                <Dropdown.Item as="button"><Link to="/saved" onClick={logFnc}><i className="fas fa-book-open mr-1"></i>Saved</Link></Dropdown.Item>
                                 <Dropdown.Item as="button" className="text-primary btn btn-link" onClick={()=>props.logFnc()}>
                                     <i className="fas fa-sign-in-alt"></i> {props.logStat}
                                 </Dropdown.Item>
