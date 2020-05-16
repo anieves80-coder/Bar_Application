@@ -111,23 +111,28 @@ const DrinkView = (props) => {
     };
         const saveData = async () => {
 
-            const data = {
-                drinkId,
-                comments,
-                star,
-                drinkImg,
-                drinkName
-            }
-            
-            const res = await axios.post("/api/save", data);           
-            
-            if(res.data.status === "ok"){
+            if(props.logStat === "Login"){                
                 setMsgActive(true);
-                setModalsMsg("Save successful");
-            }
-            if(res.data.status === "updated"){
-                setMsgActive(true);
-                setModalsMsg("This drink was already saved. Info was updated.");
+                setModalsMsg("You need to be logged in to save.");
+            } else {
+                const data = {
+                    drinkId,
+                    comments,
+                    star,
+                    drinkImg,
+                    drinkName
+                }
+                
+                const res = await axios.post("/api/save", data);           
+                
+                if(res.data.status === "ok"){
+                    setMsgActive(true);
+                    setModalsMsg("Save successful");
+                }
+                if(res.data.status === "updated"){
+                    setMsgActive(true);
+                    setModalsMsg("This drink was already saved. Info was updated.");
+                }
             }
         }
 
