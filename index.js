@@ -12,6 +12,7 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI, {useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true});
 
 const app = express();
+app.use(express.static("client/build"));
 
 app.use(bodyParser.json());
 
