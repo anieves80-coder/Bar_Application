@@ -16,7 +16,7 @@ const Header = (props) => {
         <div className="container"> 
             <div className="mt-3">
                 <div className="row">
-                    <div className="col font-italic" style={{ fontSize: "18px" }}>Search for a Random Drink Application.</div>
+                    <div className="col font-italic" style={{ fontSize: "18px" }}>Search for a Random Drink.</div>
                     <div className="d-block d-sm-none mr-2">
                         <InputGroup className="mr-2">
                             <DropdownButton
