@@ -13,7 +13,8 @@ const Header = (props) => {
     }
 
     return (
-        <div className="container"> 
+        
+        <div className="container">        
             <div className="mt-3">
                 <div className="row">
                     <div className="col font-italic" style={{ fontSize: "18px" }}>Search for a Random Drink.</div>
@@ -40,7 +41,7 @@ const Header = (props) => {
                     </div>
                 </div>
                 <hr />
-            </div>
+            </div>            
         </div>
     );    
 };
