@@ -1,18 +1,12 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const DrinkType = require('./DrinkType');
 
 
 const drinkSchema = new Schema({
-
-    userId: String,
+    
     savedDrinks: {
-        type: [{        
-        drinkId: Number,            
-        drinkName: String,
-        comments: String,
-        star: Number,
-        drinkImg: String
-        }],
+        type: [DrinkType],
         index: {            
             sparse: true
         }

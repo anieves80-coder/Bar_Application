@@ -30,8 +30,8 @@ passport.use(new GoogleStrategy({
         if(existingUser)            
             return done(null, existingUser);        
         
-        const collectionsId = await new Saved().save();        
-        const user = await new User({ googleId: profile.id, savedCollectionsId: collectionsId.id }).save();        
+        const collectionsId = await new Saved().save();          
+        const user = await new User({ googleId: profile.id, _saved: collectionsId._id }).save();             
         done(null, user);
                 
     })

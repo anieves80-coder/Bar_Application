@@ -4,8 +4,9 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
     googleId: String,
-    savedCollectionsId: String  
+    _saved: {
+        type: Schema.Types.ObjectId, ref: 'drinks'
+    }
 });
 
 mongoose.model('users', userSchema);
-
