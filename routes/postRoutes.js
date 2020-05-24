@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-//const User = mongoose.model('users');
 const Saved = mongoose.model('drinks');
 const mustBeLoggedIn = require('../middlewares/verifyLogin');
 
