@@ -23,13 +23,11 @@ const DrinkView = (props) => {
     const fetchRandomDrink = async () => {
         setDrinkImg(loading);                
         const response = await axios.get('https://www.thecocktaildb.com/api/json/v1/1/random.php');        
-        const id = response.data.drinks[0].idDrink;        
+        const id = response.data.drinks[0].idDrink;                   
         const verifyDuplicates = await axios.post('/api/verifyDuplicate', {drinkId:id});
-        
         if(verifyDuplicates.data.res)
-            setSaveMsg("This drink already saved.");
-        else
-            setDrinks(response);          
+            setSaveMsg("This drink is already saved.");
+        setDrinks(response);          
     }
 
     const fetchDrinkById = async data => {
