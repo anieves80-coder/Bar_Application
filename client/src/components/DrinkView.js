@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import loading from '../img/loading.gif';
 import Rating from './searchComponents/Rating';
 import Comment from './searchComponents/Comment';
 import SaveButton from './searchComponents/SaveButton';
-import Modal from './MessageModal';
 
 const DrinkView = (props) => {
 
@@ -18,15 +17,19 @@ const DrinkView = (props) => {
     const [instructions, setInstructions] = useState("");
     const [comments, setComments] = useState("");
     const [star, setStar] = useState(1);
-    const [clear, setClear] = useState(false);
-    const [msgActive, setMsgActive] = useState(false);
-    const [modalsMsg, setModalsMsg] = useState(false);
+    const [clear, setClear] = useState(false);    
     const [saveMsg, setSaveMsg] = useState("");
         
     const fetchRandomDrink = async () => {
         setDrinkImg(loading);                
         const response = await axios.get('https://www.thecocktaildb.com/api/json/v1/1/random.php');        
-        setDrinks(response);  
+        const id = response.data.drinks[0].idDrink;        
+        const verifyDuplicates = await axios.post('/api/verifyDuplicate', {drinkId:id});
+        
+        if(verifyDuplicates.data.res)
+            setSaveMsg("This drink already saved.");
+        else
+            setDrinks(response);          
     }
 
     const fetchDrinkById = async data => {
@@ -56,6 +59,7 @@ const DrinkView = (props) => {
             setDrinkType(data.strAlcoholic);
             setInstructions(data.strInstructions);
             setDrinkIngredients(setIngredients(data));
+            setSaveMsg("");
         }
     }
 
@@ -66,11 +70,9 @@ const DrinkView = (props) => {
             fetchRandomDrink();
     };
 
-    useEffect( () => {  
-        console.log(drinkId);      
+    useEffect( () => {             
         setDrinkTypeCall();
     }, []);
-
 
     // This function will grab all the ingredients & measurements and format it for proper viewing.
     const setIngredients = (data) => {
@@ -127,12 +129,11 @@ const DrinkView = (props) => {
                 const res = await axios.post("/api/save", data);           
                 
                 if(res.data.status === "ok"){
-                    setMsgActive(true);
-                    setModalsMsg("Save successful");
+                    setSaveMsg("Save successful.");
                 }
-                if(res.data.status === "updated"){
-                    setMsgActive(true);
-                    setModalsMsg("This drink was already saved. Info was updated.");
+                if(res.data.status === "updated"){                    
+                    setSaveMsg("This drink was already saved. Info was updated.");
+
                 }
             }
         }
@@ -143,11 +144,6 @@ const DrinkView = (props) => {
             setStar(1);
             await fetchRandomDrink();            
             setClear(false);
-        }
-
-        const setModal = () => {
-            if(msgActive)
-                return <Modal msg={modalsMsg}/>
         }
 
         return (
@@ -194,8 +190,7 @@ const DrinkView = (props) => {
                 <Comment comment={setComments} clear={clear} defaultComment={comments} />
                 <Rating star={setStar} label={"Rating:"} editable={true} val={star} clear={clear}/>
                 <div className="mt-4"><small className="text-danger">{saveMsg}</small></div>
-                <SaveButton saveFnc={saveData} />
-                <div>{setModal()}</div>
+                <SaveButton saveFnc={saveData} />                  
             </div>            
         );    
 };

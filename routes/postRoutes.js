@@ -17,14 +17,32 @@ module.exports = app => {
         res.end();
     });
 
+    //Checks to see if there is a duplicate
+    const verifyDuplicates = async (drinkId, collectionsId) => {
+        const duplicateFound = await Saved.findOne({_id: collectionsId},{ savedDrinks: { $elemMatch: { drinkId: drinkId } } });  
+        return duplicateFound;     
+    }
+
+    app.post('/api/verifyDuplicate', mustBeLoggedIn, async (req, res) => {
+        const { drinkId } = req.body;        
+        const {_saved} = req.user;
+        const duplicateFound = await verifyDuplicates(drinkId, _saved);
+        
+        if (duplicateFound.savedDrinks[0])
+            res.send({"res":true});
+        else
+            res.send({"res":false});
+
+    });
+
     app.post('/api/save', mustBeLoggedIn, async (req, res) => {
                 
         const { drinkId } = req.body;        
         const {_saved} = req.user;
         
-        //Checks to see if there is a duplicate before saving.
-        const duplicateFound = await Saved.findOne({_id: _saved},{ savedDrinks: { $elemMatch: { drinkId: drinkId } } });        
-        
+        //Checks to see if there is a duplicate before saving.        
+        const duplicateFound = await verifyDuplicates(drinkId, _saved);        
+
         //If there is a duplicate delete it and add the new one with the updated info.
         if (duplicateFound.savedDrinks[0]) {            
             const id = duplicateFound.savedDrinks[0]._id;            
